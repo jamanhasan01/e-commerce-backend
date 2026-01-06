@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User.model";
+import { registerUserService } from "../services/auth.service";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -11,20 +12,16 @@ export const registerUser = async (req: Request, res: Response) => {
         message: "Please provide all required fields (name, email, password).",
       });
     }
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      res.status(400).json({
-        success: false,
-        message: "A user with this email already exists.",
-      });
-    }
-    const newUser = await User.create({ name, email, password });
+    const user = await registerUserService(name, email, password);
     res.status(201).json({
       success: true,
       message: "user registerd successfully",
-      data: newUser,
+      data: user,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Registration failed",
+    });
   }
 };
