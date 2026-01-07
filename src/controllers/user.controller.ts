@@ -1,0 +1,38 @@
+import { Request, Response } from "express";
+import { getAllUserService } from "../services/user.service";
+
+/* =============================== Get All Users Controller ================================ */
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+    // ================================query params======================================
+    const page = Number(req.query.page) || 3;
+    const limit = Number(req.query.limit) || 2;
+
+    // ================================users service called======================================
+    const result = await getAllUserService(page, limit);
+
+    // ================================page validation======================================
+
+    if (page > result.total_pages) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Page number exceeds total pages" });
+    }
+    // ================================Success Response======================================
+    return res.status(200).json({
+      success: true,
+      data: result.users,
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+        total_pages: result.total_pages,
+        total_user: result.total_users,
+      },
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+};

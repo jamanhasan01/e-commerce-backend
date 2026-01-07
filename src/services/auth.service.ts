@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import User from "../models/User.model";
+import User from "../models/user.model";
+
+
 
 export const registerUserService = async (
   name: string,
@@ -13,5 +15,6 @@ export const registerUserService = async (
 
   const newUser = await User.create({ name, email, password });
 
+  
   return newUser;
 };

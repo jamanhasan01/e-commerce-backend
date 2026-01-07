@@ -1,17 +1,6 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
 import bcrypt from "bcrypt";
-
-/* ===============================
-    TypeScript Interface
-================================ */
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  role: "customer" | "admin" | "super_admin";
-  isBlocked: boolean;
-  comparePassword(candidatePassword: string): Promise<boolean>;
-}
+import { IUser } from "../types/user.type";
 
 /* ===============================
     Mongoose Schema
@@ -56,7 +45,7 @@ const userSchema = new Schema<IUser>(
 );
 
 /* ===============================
-   3️⃣ Password Hash Middleware
+   3Password Hash Middleware
 ================================ */
 userSchema.pre<IUser>("save", async function () {
   if (!this.isModified("password")) return;

@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
-import User from "../models/User.model";
 import { registerUserService } from "../services/auth.service";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = await req.body;
+     console.log("✅ CONTROLLER HIT"); // YOU WILL SEE THIS
+    const { name, email, password } =  req.body;
 
     if (!name || !email || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Please provide all required fields (name, email, password).",
       });
     }
+
+    console.log('log dddd');
+    
     const user = await registerUserService(name, email, password);
-    res.status(201).json({
+    return res.status(201).json({ 
       success: true,
       message: "user registerd successfully",
       data: user,
