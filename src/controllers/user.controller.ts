@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { getAllUserService } from "../services/user.service";
+import {
+  getAllUserService,
+  getSingleUserService,
+} from "../services/user.service";
 
 /* =============================== Get All Users Controller ================================ */
 export const getAllUser = async (req: Request, res: Response) => {
@@ -29,6 +32,29 @@ export const getAllUser = async (req: Request, res: Response) => {
         total_user: result.total_users,
       },
     });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+};
+
+export const getSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    /* =============================== Check User id provide G in perams or not ================================ */
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const result = await getSingleUserService(id);
+
+    res.status(200).json({ success: true, data: result });
   } catch (error: any) {
     return res.status(500).json({
       success: false,
