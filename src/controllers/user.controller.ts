@@ -3,6 +3,7 @@ import {
   getAllUserService,
   getSingleUserService,
 } from "../services/user.service";
+import { generateToken } from "../utils/jwt";
 
 /* =============================== Get All Users Controller ================================ */
 export const getAllUser = async (req: Request, res: Response) => {
@@ -56,6 +57,16 @@ export const getSingleUser = async (req: Request, res: Response) => {
 
     /* =============================== For get single user service ================================ */
     const result = await getSingleUserService(id);
+    /* =============================== For get single user service ================================ */
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    
+
     /* =============================== Success Response ================================ */
     res.status(200).json({ success: true, data: result });
   } catch (error: any) {

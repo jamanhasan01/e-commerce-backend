@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import userRoute from "./routes/user.routes";
 import connectDB from "./config/connectDB";
+import { verifyToken } from "./middlewares/auth.middleware";
 
 dotenv.config();
 
@@ -12,8 +13,6 @@ const app = express();
    Global Middleware
 ================================ */
 app.use(express.json());
-
-
 
 /* ===============================
    Connect DB
@@ -32,7 +31,6 @@ app.get("/", (_req, res) => {
 ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoute);
-
 
 /* ===============================
    Server Start

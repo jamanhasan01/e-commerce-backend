@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
 
-
-
 export const registerUserService = async (
   name: string,
   email: string,
@@ -15,6 +13,14 @@ export const registerUserService = async (
 
   const newUser = await User.create({ name, email, password });
 
-  
   return newUser;
+};
+
+/* =============================== Login User Service ================================ */
+export const loginUserService = async (email: string) => {
+  const userExists = await User.findOne({ email });
+  if (!userExists) {
+    throw new Error("User not found");
+  }
+  return userExists;
 };
