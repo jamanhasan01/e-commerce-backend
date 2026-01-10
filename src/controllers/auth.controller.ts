@@ -1,52 +1,51 @@
-import { Request, Response } from "express";
-import {
-  loginUserService,
-  registerUserService,
-} from "../services/auth.service";
-import { generateToken } from "../utils/jwt";
+import { Request, Response } from 'express'
+import { loginUserService, registerUserService } from '../services/auth.service'
+import { generateToken } from '../utils/jwt'
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    console.log(" CONTROLLER HIT"); // YOU WILL SEE THIS
-    const { name, email, password } = req.body;
+    console.log(' CONTROLLER HIT') // YOU WILL SEE THIS
+    const { name, email, password } = req.body
 
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Please provide all required fields.",
-      });
+        message: 'Please provide all required fields.',
+      })
     }
 
-    const user = await registerUserService(name, email, password);
+    const user = await registerUserService(name, email, password)
     return res.status(201).json({
       success: true,
-      message: "user registerd successfully",
+      message: 'user registerd successfully',
       data: user,
-    });
+    })
   } catch (error: any) {
     return res.status(400).json({
       success: false,
-      message: error.message || "Registration failed",
-    });
+      message: error.message || 'Registration failed',
+    })
   }
-};
+}
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email, password } = req.body
 
-  if (!email) {
+  if (!email || !password) {
     return res.status(401).json({
       success: false,
-      message: "Invalid email or password",
-    });
+      message: 'Invalid email or password',
+    })
   }
 
-  const result = await loginUserService(email);
-  const token=await generateToken({
-    userId:result._id.toString(),
-    role:result.role
+  const result = await loginUserService(email, password)
+
+  const token = await generateToken({
+    userId: result.userExists._id.toString(),
+    role: result.userExists.role,
   })
- 
-  res.status(200).send({token:token,user:result})
-  
-};
+
+  res.status(200).send({token:token})
+
+  // res.status(200).send({token:token,user:result})
+}

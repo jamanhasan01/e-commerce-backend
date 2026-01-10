@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/auth.controller";
-import { verifyToken } from "../middlewares/auth.middleware";
+import { Router } from 'express'
+import { loginUser, registerUser } from '../controllers/auth.controller'
 
-const router = Router();
 
-router.post("/register", registerUser);
+const router = Router()
 
-router.post("/login", verifyToken,loginUser);
+router.post('/register', registerUser)
 
-export default router;
+router.post('/login', loginUser)
+
+export default router
