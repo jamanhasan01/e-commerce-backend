@@ -1,7 +1,38 @@
 import { Request, Response } from "express";
+import { imageUploadService } from "../services/upload.service";
+import fs from "fs";
 
 /* =============================== Image Upload ================================ */
-export const imageUpload = (req: Request, res: Response) => {
-    
-  res.status(200).json({ ok: true });
+export const imageUpload = async (req: Request, res: Response) => {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file provided",
+      });
+    }
+
+/* =============================== Upload cloudinary ================================ */
+    const result = await imageUploadService(file);
+
+    /* ===============================
+       Delete local file
+    ================================ */
+    if (result.imageId && file.path) {
+      fs.unlinkSync(file.path);
+    }
+
+    return res.status(200).json({
+      success: true,
+      image: result,
+    });
+  } catch (error: any) {
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to upload image",
+    });
+  }
 };

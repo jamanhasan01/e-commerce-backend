@@ -1,22 +1,37 @@
-import multer from 'multer'
-import fs from 'fs'
+import multer, { Options } from 'multer'
 import path from 'path'
 
-/* ===============================
-   Storage
-================================ */
 const storage = multer.diskStorage({
-  destination: (_req, file, cb) => {
+  destination: (_req, _file, cb) => {
     cb(null, 'public/')
   },
-  filename: (req, file, cb) => {
-    const extname = path.extname(file.originalname)
-    const uniqname = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname}`
-    cb(null, uniqname)
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname)
+    const name = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`
+    cb(null, name)
   },
 })
 
 /* ===============================
+   FILE TYPE CHECK (THIS IS IT)
+================================ */
+const fileFilter: Options['fileFilter'] = (_req, file, cb) => {
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp']
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true) // ✅ allow
+  } else {
+    cb(new Error('Only image files are allowed')) // ❌ block
+  }
+}
+
+/* ===============================
    Upload Middleware
 ================================ */
-export const upload = multer({ storage })
+export const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+})
