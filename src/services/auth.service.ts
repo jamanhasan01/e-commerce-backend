@@ -1,14 +1,15 @@
 import bcrypt from 'bcrypt'
 
 import User from '../models/user.model'
+import { IUserImage } from '../types/user.type'
 
-export const registerUserService = async (name: string, email: string, password: string) => {
+export const registerUserService = async (name: string, email: string, password: string,image?:IUserImage) => {
   const userExists = await User.findOne({ email })
   if (userExists) {
     throw new Error('A user with this email already exists.')
   }
 
-  const newUser = await User.create({ name, email, password })
+  const newUser = await User.create({ name, email, password,image})
 
   return newUser
 }

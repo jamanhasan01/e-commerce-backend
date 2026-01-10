@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import userRoute from "./routes/user.routes";
-import uploadRoute from "./routes/upload.route";
+
 import connectDB from "./config/connectDB";
 import cors from "cors"
 
@@ -35,7 +35,7 @@ app.get("/", (_req, res) => {
 ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoute);
-app.use("/api",uploadRoute );
+
 
 
 /* ===============================
