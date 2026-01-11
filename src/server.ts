@@ -16,7 +16,7 @@ app.use(cors());
    Global Middleware
 ================================ */
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 /* ===============================
    Connect DB
 ================================ */

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { loginUserService, registerUserService } from '../services/auth.service'
 import { generateToken } from '../utils/jwt'
-import { imageUploadService } from '../services/upload.service'
+import { singleImageUploadService } from '../services/image.upload.service'
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -22,7 +22,7 @@ export const registerUser = async (req: Request, res: Response) => {
       data: user,
     })
     if (req.file) {
-      imageUploadService(req.file, user._id.toString())
+      singleImageUploadService(req.file, user._id.toString())
     }
   } catch (error: any) {
     return res.status(400).json({

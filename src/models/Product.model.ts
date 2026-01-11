@@ -21,7 +21,12 @@ const productSchema = new mongoose.Schema<IProduct>(
       required: true,
     },
     category: { type: String, required: true },
-    images: [{ type: String }],
+    images: [
+      {
+        publicId: { type: String, required: true },
+        url: { type: String, required: true },
+      },
+    ],
   },
   {
     timestamps: true,
