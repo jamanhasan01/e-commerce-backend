@@ -17,7 +17,7 @@ export const singleImageUploadService = async (file: any, id: string) => {
     const userFind = await User.findByIdAndUpdate(id, {
       image,
     });
-    fs.unlinkSync(file.path)
+    fs.unlinkSync(file.path);
     return userFind;
   } catch (error: any) {
     throw new Error(error.message || "Image upload failed");
@@ -36,7 +36,10 @@ export const multipleImageUploadService = async (
     const filePath = files.map((file) => file.path);
 
     const uploadCludinary = filePath.map(
-      async (path) => await cloudinary.uploader.upload(path,{folder:'e-commerce/products'})
+      async (path) =>
+        await cloudinary.uploader.upload(path, {
+          folder: "e-commerce/products",
+        })
     );
 
     const uploadResults = await Promise.all(uploadCludinary);
@@ -46,16 +49,8 @@ export const multipleImageUploadService = async (
       url: img.secure_url,
     }));
 
-    const productFind = await Product.findByIdAndUpdate(
-      id,
-      {
-        $push: {
-          images: { $each: images },
-        },
-      },
-     
-    );
-    filePath.map(path=>fs.unlinkSync(path))
+    const productFind = await Product.findByIdAndUpdate(id, {images});
+    filePath.map((path) => fs.unlinkSync(path));
     return productFind;
   } catch (error: any) {
     throw new Error(error.message || "Image upload failed");

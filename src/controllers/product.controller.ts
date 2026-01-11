@@ -20,7 +20,7 @@ export const createProduct = async (req: Request, res: Response) => {
       price:Number(price),
       stock:Number(stock),
       category,
-      images: [],
+ 
     });
 
     res.status(201).json({ success: true, data: product });
