@@ -49,9 +49,16 @@ export const getAllProduct = async (
   next: NextFunction
 ) => {
   try {
-    const page = Number(req.query.page);
+    const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 20;
-    const result = await getAllProductsService({ page, limit });
+    const select = req.query.select
+  ? (req.query.select as string).split(",").join(" ")
+  : "";
+
+
+  
+
+    const result = await getAllProductsService({ page, limit,select });
     if (page > result.total_page) {
       res
         .status(400)
