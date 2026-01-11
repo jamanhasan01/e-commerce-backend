@@ -6,6 +6,7 @@ import productRoute from "./routes/product.routes";
 
 import connectDB from "./config/connectDB";
 import cors from "cors";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 dotenv.config();
 
@@ -34,6 +35,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api", userRoute);
 app.use("/api", productRoute);
 
+
+
+
+/* =============================== Global error middleware ================================ */
+app.use(errorMiddleware);
 /* ===============================
    Server Start
 ================================ */

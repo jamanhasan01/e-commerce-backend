@@ -16,7 +16,7 @@ export const getAllUserService = async (page: number, limit: number) => {
     total_pages: Math.ceil(total_users / limit),
   };
 };
-
+// ================================Get a single user======================================
 export const getSingleUserService = async (id: string) => {
   const userFind =await User.findById( id );
   return userFind;

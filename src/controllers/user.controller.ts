@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   getAllUserService,
   getSingleUserService,
@@ -9,8 +9,8 @@ import { generateToken } from "../utils/jwt";
 export const getAllUser = async (req: Request, res: Response) => {
   try {
     // ================================query params======================================
-    const page = Number(req.query.page) || 3;
-    const limit = Number(req.query.limit) || 2;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 20;
 
     // ================================users service called======================================
     const result = await getAllUserService(page, limit);
@@ -43,7 +43,11 @@ export const getAllUser = async (req: Request, res: Response) => {
 
 /* =============================== Get Single User Controller ================================ */
 
-export const getSingleUser = async (req: Request, res: Response) => {
+export const getSingleUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
 
@@ -65,14 +69,9 @@ export const getSingleUser = async (req: Request, res: Response) => {
       });
     }
 
-    
-
     /* =============================== Success Response ================================ */
     res.status(200).json({ success: true, data: result });
   } catch (error: any) {
-    return res.status(400).json({
-      success: false,
-      message: error.message || "Failed to fetch user",
-    });
+    next(error);
   }
 };

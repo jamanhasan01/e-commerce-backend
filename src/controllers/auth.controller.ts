@@ -1,55 +1,66 @@
-import { Request, Response } from 'express'
-import { loginUserService, registerUserService } from '../services/auth.service'
-import { generateToken } from '../utils/jwt'
-import { singleImageUploadService } from '../services/image.upload.service'
+import { NextFunction, Request, Response } from "express";
+import {
+  loginUserService,
+  registerUserService,
+} from "../services/auth.service";
+import { generateToken } from "../utils/jwt";
+import { singleImageUploadService } from "../services/image.upload.service";
 
-export const registerUser = async (req: Request, res: Response) => {
+/* =============================== resgister controller ================================ */
+export const registerUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    console.log(' CONTROLLER HIT') // YOU WILL SEE THIS
-    const { name, email, password } = await req.body
+    const { name, email, password } = await req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email ||!password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide all required fields.',
-      })
+        message: "Please provide all required fields.",
+      });
     }
 
-    const user = await registerUserService(name, email, password)
+    const user = await registerUserService(name, email, password);
     res.status(201).json({
       success: true,
-      message: 'user registerd successfully',
+      message: "user registerd successfully",
       data: user,
-    })
+    });
     if (req.file) {
-      singleImageUploadService(req.file, user._id.toString())
+      singleImageUploadService(req.file, user._id.toString());
     }
   } catch (error: any) {
-    return res.status(400).json({
-      success: false,
-      message: error.message || 'Registration failed',
-    })
+    next(error);
   }
-}
+};
 
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body
+/* =============================== Login controller ================================ */
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid email or password',
-    })
+    if (!email || !password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const result = await loginUserService(email, password);
+
+    const token = await generateToken({
+      userId: result.userExists._id.toString(),
+      role: result.userExists.role,
+    });
+
+    res.status(200).send({ token: token });
+  } catch (error) {
+    next(error);
   }
-
-  const result = await loginUserService(email, password)
-
-  const token = await generateToken({
-    userId: result.userExists._id.toString(),
-    role: result.userExists.role,
-  })
-
-  res.status(200).send({ token: token })
-
-  // res.status(200).send({token:token,user:result})
-}
+};

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import { IUserImage } from '../types/user.type'
 import User from '../models/user.model'
 
+/* =============================== resgister User Service ================================ */
 export const registerUserService = async (name: string, email: string, password: string,image?:IUserImage) => {
   const userExists = await User.findOne({ email })
   if (userExists) {

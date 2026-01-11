@@ -1,29 +1,30 @@
-import multer, { Options } from 'multer'
-import path from 'path'
+import multer, { Options } from "multer";
+import path from "path";
+
+/* =============================== this middleware for upload locally image store  ================================ */
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, 'public/')
+    cb(null, "public/");
   },
   filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname)
-    const name = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`
-    cb(null, name)
+    const ext = path.extname(file.originalname);
+    const name = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    cb(null, name);
   },
-})
+});
 
-/* ===============================
-   FILE TYPE CHECK (THIS IS IT)
-================================ */
-const fileFilter: Options['fileFilter'] = (_req, file, cb) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp']
+/* ===============================   FILE TYPE CHECK (THIS IS IT) ================================ */
+
+const fileFilter: Options["fileFilter"] = (_req, file, cb) => {
+  const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true) // ✅ allow
+    cb(null, true); // ✅ allow
   } else {
-    cb(new Error('Only image files are allowed')) // ❌ block
+    cb(new Error("Only image files are allowed")); // ❌ block
   }
-}
+};
 
 /* ===============================
    Upload Middleware
@@ -34,4 +35,4 @@ export const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB
   },
-})
+});

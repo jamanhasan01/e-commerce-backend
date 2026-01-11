@@ -12,9 +12,6 @@ export const verifyToken = (
   res: Response,
   next: NextFunction
 ) => {
-
-
-    
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -30,7 +27,7 @@ export const verifyToken = (
     const secret: Secret = process.env.JSON_TOKEN_SECRET as Secret;
 
     const decoded = jwt.verify(token, secret);
-console.log('decoded ',token);
+    console.log("decoded ", token);
 
     req.user = decoded; // ✅ TypeScript-safe
     next();

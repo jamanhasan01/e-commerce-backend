@@ -2,6 +2,9 @@ import Product from "../models/Product.model";
 import User from "../models/user.model";
 import cloudinary from "../utils/cloudinary";
 import fs from "fs";
+
+
+/* =============================== single image upload for users ================================ */
 export const singleImageUploadService = async (file: any, id: string) => {
   try {
     if (!file) {
@@ -23,7 +26,7 @@ export const singleImageUploadService = async (file: any, id: string) => {
     throw new Error(error.message || "Image upload failed");
   }
 };
-
+/* =============================== multiple image upload for products ================================ */
 export const multipleImageUploadService = async (
   files: Express.Multer.File[],
   id: string
@@ -43,13 +46,13 @@ export const multipleImageUploadService = async (
     );
 
     const uploadResults = await Promise.all(uploadCludinary);
-    // 3️⃣ Prepare images for DB
+
     const images = uploadResults.map((img) => ({
       publicId: img.public_id,
       url: img.secure_url,
     }));
 
-    const productFind = await Product.findByIdAndUpdate(id, {images});
+    const productFind = await Product.findByIdAndUpdate(id, { images });
     filePath.map((path) => fs.unlinkSync(path));
     return productFind;
   } catch (error: any) {
