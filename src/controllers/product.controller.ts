@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   createProductService,
   getAllProductsService,
+  getSingleProductService,
 } from "../services/product.service";
 import { multipleImageUploadService } from "../services/image.upload.service";
 
@@ -52,19 +53,34 @@ export const getAllProduct = async (
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 20;
     const select = req.query.select
-  ? (req.query.select as string).split(",").join(" ")
-  : "";
+      ? (req.query.select as string).split(",").join(" ")
+      : "";
 
-
-  
-
-    const result = await getAllProductsService({ page, limit,select });
+    const result = await getAllProductsService({ page, limit, select });
     if (page > result.total_page) {
       res
         .status(400)
         .json({ success: false, message: "Page number exceeds total pages" });
     }
-    res.status(201).json({ success: true, data: result });
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* =============================== get single product  controller ================================ */
+
+export const getSingleProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const result = await getSingleProductService(id);
+
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
     next(error);
   }

@@ -11,11 +11,17 @@ export const createProductService = async (data: IProduct) => {
 };
 /* =============================== get all product  business logic ================================ */
 
-export const getAllProductsService = async ({ page, limit ,select}: IPagination) => {
+export const getAllProductsService = async ({
+  page,
+  limit,
+  select,
+}: IPagination) => {
   const skip = (page - 1) * limit;
   const total_product = await Product.countDocuments();
-  const products = await Product.find().select(select || '').skip(skip).limit(limit);
-
+  const products = await Product.find()
+    .select(select || "")
+    .skip(skip)
+    .limit(limit);
 
   return {
     products,
@@ -24,4 +30,9 @@ export const getAllProductsService = async ({ page, limit ,select}: IPagination)
     limit,
     total_page: Math.ceil(total_product / limit),
   };
+};
+
+/* =============================== get single product  business logic ================================ */
+export const getSingleProductService = async (id: string) => {
+  return await Product.findById(id);
 };
