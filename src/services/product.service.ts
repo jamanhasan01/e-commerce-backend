@@ -9,6 +9,7 @@ export const createProductService = async (data: IProduct) => {
     images: [],
   });
 };
+
 /* =============================== get all product  business logic ================================ */
 
 export const getAllProductsService = async ({
