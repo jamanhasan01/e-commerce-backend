@@ -2,9 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import userRoute from "./routes/user.routes";
+import productRoute from "./routes/product.routes";
 
 import connectDB from "./config/connectDB";
-import cors from "cors"
+import cors from "cors";
 
 dotenv.config();
 
@@ -28,15 +29,10 @@ app.get("/", (_req, res) => {
   res.send("server running well");
 });
 
-
-
-/* ===============================
-   Routes
-================================ */
+/* =============================== All Route Global middle ware ================================ */
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoute);
-
-
+app.use("/api", productRoute);
 
 /* ===============================
    Server Start
