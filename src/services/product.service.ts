@@ -16,6 +16,7 @@ export const getAllProductsService = async ({ page, limit }: IPagination) => {
   const total_product = await Product.countDocuments();
   const products = await Product.find().skip(skip).limit(limit);
 
+
   return {
     products,
     total_product,
