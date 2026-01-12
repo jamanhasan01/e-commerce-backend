@@ -10,8 +10,20 @@ export const createProductCategory = async (
 ) => {
   try {
     const { categories } = req.body;
-    const result = await createProductCategoryService(categories);
 
+    if (!Array.isArray(categories)) {
+      const err: any = new Error("Categories must be an array");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    if (categories.length === 0) {
+      const err: any = new Error("Provide at least one category");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const result = await createProductCategoryService(categories);
 
     res.status(201).json({ success: true, data: result });
   } catch (error) {
