@@ -10,14 +10,13 @@ const CategorySchema = new mongoose.Schema(
 
     slug: {
       type: String,
-      required: true,
       unique: true,
       lowercase: true,
     },
 
     icon: {
       type: String,
-      required: true, // emoji / icon-name / unicode
+      required: true,
       trim: true,
     },
   },
@@ -25,7 +24,6 @@ const CategorySchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
 
 const Category =
   mongoose.models.Category || mongoose.model("Category", CategorySchema);

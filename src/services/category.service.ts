@@ -12,9 +12,8 @@ export const createProductCategoryService = async (categories: ICategory[]) => {
     // 🔥 generate slug manually (REQUIRED for insertMany)
   const payload = categories.map(c => ({
     ...c,
-    slug:c.slug
-      .trim()
-      .toLowerCase()
+    slug:c.name
+    
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "-"),
   }));
