@@ -6,6 +6,7 @@ import User from '../models/User.model'
 
 
 
+
 /* =============================== resgister User Service ================================ */
 export const registerUserService = async (name: string, email: string, password: string,image?:IUserImage) => {
   const userExists = await User.findOne({ email })
