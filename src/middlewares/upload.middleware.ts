@@ -1,26 +1,28 @@
+// import multer, { Options } from "multer";
+// import path from "path";
+// import fs from "fs";
+// /* =============================== this middleware for upload locally image store  ================================ */
+// /* ===============================
+//    Ensure upload directory exists
+// ================================ */
+// const uploadDir = path.join(process.cwd(), "public");
+
 import multer, { Options } from "multer";
-import path from "path";
-import fs from "fs";
-/* =============================== this middleware for upload locally image store  ================================ */
-/* ===============================
-   Ensure upload directory exists
-================================ */
-const uploadDir = path.join(process.cwd(), "public");
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// if (!fs.existsSync(uploadDir)) {
+//   fs.mkdirSync(uploadDir, { recursive: true });
+// }
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, "public/");
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const name = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-    cb(null, name);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (_req, _file, cb) => {
+//     cb(null, "public/");
+//   },
+//   filename: (_req, file, cb) => {
+//     const ext = path.extname(file.originalname);
+//     const name = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+//     cb(null, name);
+//   },
+// });
 
 /* ===============================   FILE TYPE CHECK (THIS IS IT) ================================ */
 
@@ -34,13 +36,21 @@ const fileFilter: Options["fileFilter"] = (_req, file, cb) => {
   }
 };
 
-/* ===============================
-   Upload Middleware
-================================ */
+// /* ===============================
+//    Upload Middleware
+// ================================ */
+// export const upload = multer({
+//   storage,
+//   fileFilter,
+//   limits: {
+//     fileSize: 5 * 1024 * 1024, // 5MB
+//   },
+// });
 export const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
+

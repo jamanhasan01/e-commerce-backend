@@ -1,60 +1,73 @@
 import Product from "../models/Product.model";
 import User from "../models/User.model";
-
 import cloudinary from "../utils/cloudinary";
-import fs from "fs";
 
-
-/* =============================== single image upload for users ================================ */
-export const singleImageUploadService = async (file: any, id: string) => {
+// ================================ Single image upload for users ===============================
+export const singleImageUploadService = async (
+  file: Express.Multer.File,
+  id: string
+) => {
   try {
     if (!file) {
       throw new Error("No file received");
     }
-    const uploadCludinary = await cloudinary.uploader.upload(file.path, {
-      folder: "e-commerce/users",
+    const uploadCloudinary = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: "e-commerce/users" }, (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        })
+        .end(file.buffer);
     });
+
     const image = {
-      publicId: uploadCludinary.public_id,
-      url: uploadCludinary.url,
+      publicId: uploadCloudinary.public_id,
+      url: uploadCloudinary.secure_url,
     };
-    const userFind = await User.findByIdAndUpdate(id, {
-      image,
-    });
-    fs.unlinkSync(file.path);
+
+    const userFind = await User.findByIdAndUpdate(id, { image });
     return userFind;
   } catch (error: any) {
     throw new Error(error.message || "Image upload failed");
   }
 };
-/* =============================== multiple image upload for products ================================ */
+
+// ================================ Multiple image upload for products ===============================
 export const multipleImageUploadService = async (
   files: Express.Multer.File[],
   id: string
 ) => {
   try {
-    if (!files) {
-      throw new Error("No file received");
+    if (!files || files.length === 0) {
+      throw new Error("No files received");
     }
 
-    const filePath = files.map((file) => file.path);
-
-    const uploadCludinary = filePath.map(
-      async (path) =>
-        await cloudinary.uploader.upload(path, {
-          folder: "e-commerce/products",
-        })
+    const uploadResults = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve, reject) => {
+            cloudinary.uploader
+              .upload_stream(
+                { folder: "e-commerce/products" },
+                (error, result) => {
+                  if (error) reject(error);
+                  else resolve(result);
+                }
+              )
+              .end(file.buffer);
+          })
+      )
     );
 
-    const uploadResults = await Promise.all(uploadCludinary);
-
-    const images = uploadResults.map((img) => ({
+    const images = uploadResults.map((img: any) => ({
       publicId: img.public_id,
       url: img.secure_url,
     }));
 
     const productFind = await Product.findByIdAndUpdate(id, { images });
-    filePath.map((path) => fs.unlinkSync(path));
     return productFind;
   } catch (error: any) {
     throw new Error(error.message || "Image upload failed");
