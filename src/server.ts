@@ -12,7 +12,17 @@ import { errorMiddleware } from './middlewares/error.middleware'
 dotenv.config()
 
 const app = express()
-app.use(cors())
+/* =============================== CORS CONFIG ================================ */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://e-commerce-backend-tawny-ten.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 /* ===============================
    Global Middleware
