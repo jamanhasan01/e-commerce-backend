@@ -1,7 +1,15 @@
 import multer, { Options } from "multer";
 import path from "path";
-
+import fs from "fs";
 /* =============================== this middleware for upload locally image store  ================================ */
+/* ===============================
+   Ensure upload directory exists
+================================ */
+const uploadDir = path.join(process.cwd(), "public");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {

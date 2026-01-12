@@ -5,6 +5,7 @@ import {
   getSingleProductService,
 } from "../services/product.service";
 import { multipleImageUploadService } from "../services/image.upload.service";
+import { error } from "console";
 
 /* =============================== product create controller ================================ */
 export const createProduct = async (
@@ -77,9 +78,7 @@ export const getSingleProduct = async (
 ) => {
   try {
     const { id } = req.params;
-
     const result = await getSingleProductService(id);
-
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     next(error);

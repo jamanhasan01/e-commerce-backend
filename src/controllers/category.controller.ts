@@ -1,20 +1,34 @@
-import { NextFunction, Request, Response } from 'express'
-import { createProductCategoryService } from '../services/category.service'
-import Category from '../models/Category.model'
+import { NextFunction, Request, Response } from "express";
+import { createProductCategoryService } from "../services/category.service";
+import Category from "../models/Category.model";
 
 /* =============================== create product category  controller ================================ */
-export const createProductCategory = async (req: Request, res: Response, next: NextFunction) => {
-  const { categories } = req.body
-  const result = await createProductCategoryService(categories)
-  res.status(201).json({ success: true })
-}
-
-export const getAllCategories = async (req: Request, res: Response, next: NextFunction) => {
+export const createProductCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
+    const { categories } = req.body;
+    const result = await createProductCategoryService(categories);
+    console.log('result ',result);
     
-    const result=await Category.find()
-    res.status(200).json({ success: true ,result})
+    res.status(201).json({ success: true, data: result });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+export const getAllCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await Category.find();
+    const total = await Category.countDocuments();
+    res.status(200).json({ success: true, result, total });
+  } catch (error) {
+    next(error);
+  }
+};
