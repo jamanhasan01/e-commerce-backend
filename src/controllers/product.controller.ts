@@ -5,7 +5,7 @@ import {
   getSingleProductService,
 } from "../services/product.service";
 import { multipleImageUploadService } from "../services/image.upload.service";
-import { error } from "console";
+
 
 /* =============================== product create controller ================================ */
 export const createProduct = async (

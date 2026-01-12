@@ -28,7 +28,7 @@ import multer, { Options } from "multer";
 
 const fileFilter: Options["fileFilter"] = (_req, file, cb) => {
   const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
-
+  
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true); // ✅ allow
   } else {

@@ -6,7 +6,6 @@ import { IPagination } from "../types/query.type";
 export const createProductService = async (data: IProduct) => {
   return await Product.create({
     ...data,
-    images: [],
   });
 };
 
