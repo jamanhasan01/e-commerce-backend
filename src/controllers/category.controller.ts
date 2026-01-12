@@ -11,8 +11,8 @@ export const createProductCategory = async (
   try {
     const { categories } = req.body;
     const result = await createProductCategoryService(categories);
-    console.log('result ',result);
-    
+
+
     res.status(201).json({ success: true, data: result });
   } catch (error) {
     next(error);

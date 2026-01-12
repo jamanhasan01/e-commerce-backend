@@ -6,3 +6,9 @@ export interface IProduct {
   category: string;
   images?: string[];
 }
+
+export interface ICategory{
+  name:string,
+  slug:string,
+  icon:string
+}

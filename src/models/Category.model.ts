@@ -13,7 +13,6 @@ const CategorySchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      trim: true,
     },
 
     icon: {
@@ -26,6 +25,7 @@ const CategorySchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 const Category =
   mongoose.models.Category || mongoose.model("Category", CategorySchema);
