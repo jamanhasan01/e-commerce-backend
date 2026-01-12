@@ -1,8 +1,13 @@
 import { Router } from "express";
 import { getAllUser, getSingleUser } from "../controllers/user.controller";
+import {
+  AuthRequest,
+  verifyAdmin,
+  verifyToken,
+} from "../middlewares/auth.middleware";
 
 const router = Router();
-router.get("/users",getAllUser);
+router.get("/users", verifyToken, verifyAdmin, getAllUser);
 router.get("/users/:id", getSingleUser);
 
 export default router;

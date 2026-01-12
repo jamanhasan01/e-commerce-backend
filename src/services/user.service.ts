@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import User from "../models/User.model";
 
 // ================================Get all Users service======================================
 export const getAllUserService = async (page: number, limit: number) => {

@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
   user?: JwtDecoded | string;
 }
 
-/* =============================== Verify Token ================================ */
+/* =============================== Verify user Token ================================ */
 export const verifyToken = (
   req: AuthRequest,
   res: Response,
@@ -27,7 +27,6 @@ export const verifyToken = (
     const secret: Secret = process.env.JSON_TOKEN_SECRET as Secret;
 
     const decoded = jwt.verify(token, secret);
-    console.log("decoded ", token);
 
     req.user = decoded; // ✅ TypeScript-safe
     next();
@@ -37,4 +36,26 @@ export const verifyToken = (
       message: "Invalid or expired token",
     });
   }
+};
+
+/* =============================== Verify admin Token ================================ */
+export const verifyAdmin = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user;
+  if (!user || typeof user === "string") {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
+  }
+  if (user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Admin access only",
+    });
+  }
+  next();
 };

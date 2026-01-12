@@ -1,5 +1,6 @@
 import Product from "../models/Product.model";
-import User from "../models/user.model";
+import User from "../models/User.model";
+
 import cloudinary from "../utils/cloudinary";
 import fs from "fs";
 
