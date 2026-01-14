@@ -11,8 +11,7 @@ export const getAllUser = async (req: Request, res: Response) => {
     // ================================query params======================================
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 20;
-    
-    
+
     // ================================users service called======================================
     const result = await getAllUserService(page, limit);
 

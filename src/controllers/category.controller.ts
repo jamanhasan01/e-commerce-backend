@@ -39,7 +39,7 @@ export const getAllCategories = async (
   try {
     const result = await Category.find();
     const total = await Category.countDocuments();
-    res.status(200).json({ success: true, result, total });
+    res.status(200).json({ success: true, data: result, total });
   } catch (error) {
     next(error);
   }
