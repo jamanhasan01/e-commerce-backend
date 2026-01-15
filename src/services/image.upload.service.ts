@@ -69,7 +69,7 @@ export const multipleImageUploadService = async (
 
     const productFind = await Product.findByIdAndUpdate(id, { images });
 
-    console.log('productfind ',productFind);
+
     
     return productFind;
   } catch (error: any) {

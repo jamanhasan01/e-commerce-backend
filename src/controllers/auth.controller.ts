@@ -13,16 +13,17 @@ export const registerUser = async (
   next: NextFunction
 ) => {
   try {
-    const { name, email, password } = await req.body;
+    const { name, email, password, phone } = await req.body;
 
-    if (!name || !email ||!password) {
+    
+    if (!name || !email || !password || !phone) {
       return res.status(400).json({
         success: false,
         message: "Please provide all required fields.",
       });
     }
 
-    const user = await registerUserService(name, email, password);
+    const user = await registerUserService(name, email, password, phone);
     res.status(201).json({
       success: true,
       message: "user registerd successfully",

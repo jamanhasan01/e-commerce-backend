@@ -19,6 +19,7 @@ export const errorMiddleware = (
   if (err.name === "ValidationError") {
     const messages = Object.values(err.errors).map((e: any) => e.message);
 
+
     return res.status(400).json({
       success: false,
       message: messages[0],

@@ -14,10 +14,10 @@ export const createProduct = async (
 ) => {
   try {
     const { name, description, price, stock, category } = req.body;
-    console.log("body ", req.body);
+   
 
     // basic validation
-    if (!name || !description || !price || !stock || !category ) {
+    if (!name || !description || !price || !stock || !category) {
       return res.status(400).json({
         message: "All fields are required",
       });

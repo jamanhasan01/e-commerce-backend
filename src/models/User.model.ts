@@ -24,7 +24,12 @@ const userSchema = new Schema<IUser>(
 
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
+
+      validate: {
+        validator: (v: string) => v.length >= 8,
+        message: "Password must be at least 8 characters long",
+      },
       select: false,
     },
     image: {
@@ -37,6 +42,14 @@ const userSchema = new Schema<IUser>(
       enum: ["customer", "admin", "super_admin"],
       default: "customer",
     },
+phone: {
+  type: String,
+  required: [true, "Phone number is required"],
+  match: [
+    /^(?:\+880|880|0)1[3-9]\d{8}$/,
+    "Invalid Bangladeshi phone number",
+  ],
+},
 
     isBlocked: {
       type: Boolean,
