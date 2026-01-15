@@ -27,7 +27,9 @@ export const verifyToken = (
     const secret: Secret = process.env.JSON_TOKEN_SECRET as Secret;
 
     const decoded = jwt.verify(token, secret);
-
+    
+    console.log('decoded ');
+    
     req.user = decoded; // ✅ TypeScript-safe
     next();
   } catch (error) {
