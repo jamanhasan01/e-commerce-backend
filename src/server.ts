@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoute from "./routes/user.routes";
 import productRoute from "./routes/product.routes";
 import categoryRoute from "./routes/category.routes";
+import cookieParser from 'cookie-parser'
 
 import connectDB from "./config/connectDB";
 import cors from "cors";
@@ -20,13 +21,14 @@ app.use(
       "https://e-commerce-backend-tawny-ten.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials:true,
   })
 );
 
 /* ===============================
    Global Middleware
 ================================ */
+app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 /* ===============================
